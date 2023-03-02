@@ -1,5 +1,10 @@
 # 0x05. N Queens
 
+### Read: 
+- [Queen](https://en.wikipedia.org/wiki/Backtracking)
+- [Backtracking](https://en.wikipedia.org/wiki/Queen_%28chess%29)
+
+
 ## Task
     The N queens puzzle is the challenge of placing N non-attacking queens on an N×N chessboard. Write a program that solves the N queens problem.
 
