@@ -3,6 +3,8 @@
 Rotate 2D Matrix
 """
 def rotate_2d_matrix(matrix):
+    """Rotates an m by n 2D matrix in place.
+    """
     n = len(matrix)
     # Transpose the matrix
     for i in range(n):
