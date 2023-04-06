@@ -37,26 +37,29 @@ def isWinner(x, nums):
                 primes.append(i)
         return primes
 
-    def can_win(primes, n):
+    def can_win(primes, n, is_maria_turn):
         """
         Helper function can_win checks whether the player
         whose turn it is can win the game, given the set
         of prime numbers and the current value of n.
         """
-        if n <= 1:
+        if n == 1:
             return False
+        
+        has_moves = False
         for p in primes:
             if n % p == 0:
-                return not can_win(primes, n//p)
-        return True
+                if can_win(primes, n//p, not is_maria_turn):
+                    return not is_maria_turn
+                has_moves = True
+        
+        return has_moves
 
     maria_wins = 0
     ben_wins = 0
     for i in range(x):
         primes = get_primes(nums[i])
-        if primes == []:
-            ben_wins += 1
-        elif can_win(primes, nums[i]):
+        if can_win(primes, nums[i], True):
             maria_wins += 1
         else:
             ben_wins += 1
