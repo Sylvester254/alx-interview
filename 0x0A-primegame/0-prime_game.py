@@ -1,61 +1,69 @@
 #!/usr/bin/python3
+"""
+The isWinner function takes in two arguments, x and nums.
+x is the number of rounds, and nums is a list of integers
+representing the values of n for each round.
+The function returns the name of the player that won the
+most rounds, or None if the winner cannot be determined.
+"""
+
+
 def isWinner(x, nums):
     """
-    Helper function to get all primes up to a given number
+    isWinner function takes in two arguments, x and nums
+    and returns the name of the player that won the
+    most rounds, or None
     """
-    def getPrimes(n):
-        sieve = [True] * (n+1)
-        sieve[0] = sieve[1] = False
-        for i in range(2, int(n**0.5)+1):
-            if sieve[i]:
-                for j in range(i*i, n+1, i):
-                    sieve[j] = False
-        return [i for i in range(n+1) if sieve[i]]
+    def is_prime(n):
+        """
+        Helper function is_prime checks whether a given
+        number n is prime or not.
+        """
+        if n < 2:
+            return False
+        for i in range(2, int(n**0.5) + 1):
+            if n % i == 0:
+                return False
+        return True
 
-    """
-    Helper function to check if there are any primes left in the list
-    """
-    def hasPrimes(lst):
-        for num in lst:
-            if num != 0 and num != 1 and all(num % i != 0
-                                             for i in range
-                                             (2, int(num**0.5)+1)):
-                return True
-        return False
+    def get_primes(n):
+        """
+        Helper function get_primes generates a list of
+        prime numbers from 2 up to n
+        """
+        primes = []
+        for i in range(2, n+1):
+            if is_prime(i):
+                primes.append(i)
+        return primes
 
-    """
-    Helper function to simulate a round of the game
-    """
-    def playRound(lst, player):
-        primes = getPrimes(lst[-1])
-        for prime in primes:
-            if prime in lst:
-                for i in range(prime, lst[-1]+1, prime):
-                    if lst[-i] != 0:
-                        lst[-i] = 0
-                if not hasPrimes(lst):
-                    return player
-        return None
+    def can_win(primes, n):
+        """
+        Helper function can_win checks whether the player
+        whose turn it is can win the game, given the set
+        of prime numbers and the current value of n.
+        """
+        if n <= 1:
+            return False
+        for p in primes:
+            if n % p == 0:
+                return not can_win(primes, n//p)
+        return True
 
-    """
-    Main function to play x rounds of the game
-    """
-    winner_counts = {'Maria': 0, 'Ben': 0}
+    maria_wins = 0
+    ben_wins = 0
     for i in range(x):
-        lst = [j for j in range(0, nums[i]+1)]
-        winner = None
-        while winner is None:
-            winner = playRound(lst, 'Maria')
-            if winner is None:
-                winner = playRound(lst, 'Ben')
-        winner_counts[winner] += 1
+        primes = get_primes(nums[i])
+        if primes == []:
+            ben_wins += 1
+        elif can_win(primes, nums[i]):
+            maria_wins += 1
+        else:
+            ben_wins += 1
 
-    """
-    Determine the winner based on who won the most rounds
-    """
-    if winner_counts['Maria'] > winner_counts['Ben']:
-        return 'Maria'
-    elif winner_counts['Ben'] > winner_counts['Maria']:
-        return 'Ben'
+    if maria_wins > ben_wins:
+        return "Maria"
+    elif ben_wins > maria_wins:
+        return "Ben"
     else:
         return None
