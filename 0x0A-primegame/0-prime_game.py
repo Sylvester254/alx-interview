@@ -45,14 +45,14 @@ def isWinner(x, nums):
         """
         if n == 1:
             return False
-        
+
         has_moves = False
         for p in primes:
             if n % p == 0:
                 if can_win(primes, n//p, not is_maria_turn):
                     return not is_maria_turn
                 has_moves = True
-        
+
         return has_moves
 
     maria_wins = 0
